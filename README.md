@@ -1,3 +1,3 @@
-# LED_weaving
+# LED_crafting
 
-design files for woven LED displays
+design files for hand-crafted LED displays
