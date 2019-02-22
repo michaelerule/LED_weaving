@@ -221,13 +221,14 @@ void setup() {
     display_data[line]=bad_LEDs[line]=0;
 
   // Some LEDs are bad, not them here with this
-  set_pixel(&bad_LEDs[0],2,NCOLS-1);
-  set_pixel(&bad_LEDs[0],6,NCOLS-1);
-  set_pixel(&bad_LEDs[0],14,0);
+  //uset_pixel(&bad_LEDs[0],2,NCOLS-1);
+  //set_pixel(&bad_LEDs[0],6,NCOLS-1);
+  //set_pixel(&bad_LEDs[0],14,0);
 
   // Arduino environment might be already running interrupts
   // Temporarily disable interrupts as we configure
   cli();
+  
 
   // Can't use timer 0 since arduino uses it!!
   // Use the TIMER2_OVF_vect
