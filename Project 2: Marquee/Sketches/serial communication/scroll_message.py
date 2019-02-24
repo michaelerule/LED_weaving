@@ -15,7 +15,7 @@ import codecs
 baudrate = 9600#4800
 delay = .15
 message = "PaperMarquee 0.2       ♥♥♥        "
-
+fontfile = 'marquee_font.txt'
 
 print('message is:')
 print('  ',message)

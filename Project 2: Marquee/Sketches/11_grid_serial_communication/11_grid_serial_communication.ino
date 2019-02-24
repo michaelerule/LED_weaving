@@ -1,29 +1,25 @@
 /*
+    This is designed for the AtMega168/328-based boards and will not work on 
+    other Arduino platforms, since it uses port mappings to more efficiently 
+    control the LEDs.
 
-  We'll extend the "bulk scan" example to display 
-  serial data sent from the computer. 
-
-  First, as a test, write a routine to shift the
-  display data down one row.
-
-  For this, we'll do something simple, and just take
-  the lowest 5 bits from the serial byte and 
-  pipe it to the screen, shifting all other lines
-  down one. 
-  
-  In this one, we'll scan ALL lights at once, per row.
-  This causes some issues since rows with many lights on
-  will be dim, but it is much faster and might be a bit
-  brigter overall. 
-
-  We assume that we're using one of the AtMega*8-based
-  Arduinos, in which pins 0-7 map to portD. Pins 8-13 
-  map to portB (6 pins)
-
-  This project uses 11 control lines, reserving 0 and 1
-  for serial I/O, so 13 in total. We don't need to worry 
-  about mapping using PORTC, the analog I/O lines.   
+    We'll extend the "bulk scan" example to display serial data sent from the 
+    computer. 
     
+    First, as a test, write a routine to shift the display data down 
+    one row. For this, we'll do something simple, and just take the lowest NROWS 
+    bits from the serial byte and pipe it to the screen, shifting all other 
+    lines down one. 
+    
+    Scanning charlieplexed LEDs "in parallel": 
+    
+    We scan ALL lights at once, per row. This causes some issues since rows 
+    with many lights on will dim, but it is much faster and brigter overall.
+    This is technically out of spec for the arduino, as it can over-current
+    the I/O lines if too many LEDs are on. In practice, with the diagonally-
+    multiplexed marquee, more than three LEDs per row are seldom on, and this 
+    method works fairly well. 
+  
     DDRx  : 1 = output, 0 = input
     PORTx : output buffer
     PINx  : digital input buffer ( writes set pullups )
@@ -50,14 +46,6 @@
         6 MISO +-+  VCC 3
         5 SCK  + + MOSI 2 
         4 RST  +-+  GND 1
-        Programmer pinout, 6 pin:
-                
-        6 MISO +-+  
-        5 SCK  + + 
-        4 RST  +-+  
-        VCC 3
-        MOSI 2
-        GND 1
 
         Programmer pinout, 10 pin:
                 
@@ -70,14 +58,15 @@
 
 #include <avr/interrupt.h>
 
-#define DELAY 15
+#define DELAY  50
 #define NLINES 11
-#define SCANRATE 130
+#define NCOLS ((NLINES-1)/2)
+#define NROWS (((NLINES-1)*NLINES)/NCOLS)
 
 // Map from LED grid line number to arduino pin
 // This needs to be a contiguous block of pins
 #define PIN_OFFSET 2
-const uint8_t lineToPin[NLINES] {0,2,3,5,4,1,9,10,8,7,6};
+const uint8_t lineToPin[NLINES] {10,0,2,4,6,8,7,5,3,1,9};
 
 // Volatile variables for timer interrupt routine
 #define disp_t volatile uint16_t
@@ -85,9 +74,8 @@ disp_t display_data[NLINES];
 volatile int line1 = 0;
 volatile int line2 = 0;
 
-// Trying to light dead LEDs causes other LEDs
-// to light up in a charlieplexing configuration
-// So, don't set these ones!
+// Trying to light 'dead' LEDs causes other LEDs to light up in a charlieplexing 
+// configuration. So, don't set these ones to on! (see setup code)
 disp_t bad_LEDs[NLINES];
 
 // Commands to set all three ports at the same time
@@ -112,10 +100,8 @@ SIGNAL(TIMER2_COMPA_vect)
   // Set everything LOW and INPUT mode
   set_ddr(0);
   set_port(0);
-  
   // Increment loop counters
   line1 = (line1+1)%NLINES ;
-  
   // Show ALL pins
   // The currently active line will be high
   // All active LEDs on this line will be low
@@ -125,10 +111,6 @@ SIGNAL(TIMER2_COMPA_vect)
   set_ddr(io_mode<<PIN_OFFSET);
   set_port(pin_states<<PIN_OFFSET);
 }
-
-// These work as long as NLINES is odd
-#define NCOLS ((NLINES-1)/2)
-#define NROWS (((NLINES-1)*NLINES)/NCOLS)
 
 /* The Charlieplexing scanning grid does not line up 
  * nicely with the display grid, so we convert display
@@ -228,34 +210,28 @@ void setup() {
   // Arduino environment might be already running interrupts
   // Temporarily disable interrupts as we configure
   cli();
-  
-
   // Can't use timer 0 since arduino uses it!!
   // Use the TIMER2_OVF_vect
   // Set clock divisor (small 3 bits of TCCR2B)
   // Possible values are (0 through 7): 1 8 32 64 128 256 1024
   TCCR2B=(TCCR2B&0b11111000)|0b011;
-
   // Set the output compare A bit for timer 2
   TIMSK2 |= 0b010;
-
   // Set timer period
   OCR2A = 1;
-  
   // Allow interrupts
   sei();
 
   // Start with all lights on
-  for (int row=0; row<NROWS; row++) {
-    for (int col=0; col<NCOLS; col++) {
+  for (int row=0; row<NROWS; row++)
+    for (int col=0; col<NCOLS; col++)
       set_pixel(&display_data[0],row,col);
-    }
-  }
   
   // Start listening for serial
-  Serial.begin(9600);
+  //Serial.begin(9600);
 }
 
+/*
 void loop() {
     uint8_t data;
     if (Serial.available()) { // If anything comes in Serial
@@ -265,4 +241,24 @@ void loop() {
       for (int col=0; col<NCOLS; col++)
         write_pixel(&display_data[0],0,col,(data>>col)&1);
     }
+}
+*/
+
+void loop() {
+  display_check();
+}
+
+void display_check() {
+  for (int col=0; col<NCOLS; col++) {
+    for (int row=0; row<NROWS; row++) {
+      set_pixel(&display_data[0],row,col);
+      delay(DELAY);
+    }
+  }
+  for (int col=0; col<NCOLS; col++) {
+    for (int row=0; row<NROWS; row++) {
+      clear_pixel(&display_data[0],row,col); 
+      delay(DELAY);
+    }
+  }
 }
