@@ -1,0 +1,36 @@
+
+alphabet.png:
+
+A bitmap font for the scrolling marquee.
+
+
+png2int.py:
+
+A Jython program that accepts a .png format bitmap font, and outputs a
+hex representation. The input image should be black and white, except for
+single magenta (#FF00FF) pixels that mark the separation between characters.
+The input and output filenames are hard-coded at the top of the file.
+
+
+marquee_font.txt:
+
+Bitmap font converted to hex codes. The `load_font.py` script reads this
+input into python.
+
+
+pipe_to_serial.py: 
+
+Gets characters typed at the command line and sends them to the marquee
+over a serial communication. Uses `marquee_font.txt` for the marquee font.
+
+
+scroll_message.py: 
+
+Repeatedly scrolls a message (hard-coded at the top of the file) to the
+marquee over serial'
+
+
+prepare_c_datastructures.py
+
+Python script to create C datastructures for embedding the font inside
+Arduino sketches directly.
