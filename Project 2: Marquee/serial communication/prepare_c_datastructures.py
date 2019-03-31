@@ -45,7 +45,7 @@ fontfile = "../Fonts/Pixel Fonts/Height 5/alphabet_extended_turkish_rounded.png"
 # Magenta color delimits character data
 delimit  = (255,0,255)
 
-# Unicode points corresponding to the glyps in the fontfile
+# Unicode points corresponding to the glyps in the font file
 mapping =\
     'ABCDEFGHİJKLMNOPQRSTUVWXYZ'+\
     'abcdefghijklmnopqrstuvwxyz'+\
