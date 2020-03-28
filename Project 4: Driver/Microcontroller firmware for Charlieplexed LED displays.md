@@ -1,22 +1,22 @@
 
 # Microcontroller firmware for Charlieplexed LED displays
 
-With coronavirus lockdown in full effect, I find myself in search of quiet immersive hobbies to pass the time and distract from the news. Building LED displays by hand will do!
+With coronavirus lockdown in full effect, I find myself in search of quiet immersive hobbies to pass the time and distract from the news. Building LED displays by hand will do.
 
-Previous posts illustrated hardware ideas for building [Charlieplexed](https://en.wikipedia.org/wiki/Charlieplexing) displays ([1](http://crawlingrobotfortress.blogspot.com/2013/03/charlieplexing-with-led-dot-matrix.html)
- [2](https://crawlingrobotfortress.blogspot.com/2013/02/cross-post-diy-tinymarquee-attiny24.html)). Recent posts on [constructing displays efficiently by hand](http://crawlingrobotfortress.blogspot.com/2019/02/led-multiplexing-layouts-for-hand.html) ([3](http://crawlingrobotfortress.blogspot.com/2019/12/paper-marquee-02.html)
+Previous posts illustrated hardware building [Charlieplexed](https://en.wikipedia.org/wiki/Charlieplexing) displays ([1](http://crawlingrobotfortress.blogspot.com/2013/03/charlieplexing-with-led-dot-matrix.html)
+ [2](https://crawlingrobotfortress.blogspot.com/2013/02/cross-post-diy-tinymarquee-attiny24.html)). Recent posts on [constructing displays by hand](http://crawlingrobotfortress.blogspot.com/2019/02/led-multiplexing-layouts-for-hand.html) ([3](http://crawlingrobotfortress.blogspot.com/2019/12/paper-marquee-02.html)
 [4](http://crawlingrobotfortress.blogspot.com/2019/12/dreamcatcher.html)) are useful now, since board fab houses face shutdowns and delays due to the pandemic. However, building the display hardware is only half the work: one also needs a display driver.
 
-This post covers strategies for writing firmware to drive Charlieplexed LED displays. I'll be working with the [Arduino Uno](https://en.wikipedia.org/wiki/Arduino_Uno), which uses the [AtMega328 microcontroller](https://en.wikipedia.org/wiki/ATmega328P), and which I suspect many of you will already have at home. These strategies are general, but the hardware-specific optimizations will need to be adapted if using a different microcontroller.
+This post covers strategies for writing firmware to drive Charlieplexed LED displays. I'll be working with the [Arduino Uno](https://en.wikipedia.org/wiki/Arduino_Uno), which uses the [AtMega328 microcontroller](https://en.wikipedia.org/wiki/ATmega328P). These strategies are general, but the hardware-specific optimizations will need to be adapted if using a different microcontroller.
 
 ## 1. Test the display one light at a time
 
-One you've built the display, the first thing to do is to verify that all LEDs work.
+The first thing to do is to verify that all LEDs work.
 
 Before starting, ensure that all control lines have appropriate [current-limiting resistors](https://www.sparkfun.com/tutorials/219) to avoid damaging the LEDs. Speaking from experience, it is very frustrating to burn out
 a LED matrix before even getting started! 
 
-Throughout this tutorial, I'll be working on a 306-light project that uses 18 control lines (the maximum number that one can use on the Arduino Uno while still leaving the serial pins free). I've arranged the display in a circular pattern based, but these code examples will assume an ordinary rectangular layout for simplicity.
+I'm working on a 306-light project that uses 18 control lines (the maximum number that one can use on the Arduino Uno while still leaving the serial pins free). I've arranged the display in a circular pattern based, but these code examples will assume an ordinary rectangular layout for simplicity.
 
 The Arduino sketch below will light-up each LED in a Charlieplexed display in sequence. Follow the steps in the top comment to adapt it to your project.
 
@@ -83,7 +83,7 @@ In Charlieplexed displays, attempting to light a dead pixel will cause current t
 
 Lighting LEDs individually works for small projects, but not for large ones (>50 LEDs). As the number of lights increases, the fraction of time that each light spends on decreases, making the display dim. There also isn't enough time to scan a large number of lights without introducing noticeable flicker.
 
-The solution is to scan an entire row or column of the matrix at once. One can drive multiple LEDs simultaneously by (e.g.) turning on one anode and multiple cathodes. When doing this, take care not to over-current the microcontroller IO pins. Appendix 1 (at the end of this post) gives notes for setting resistor values, but the usual series resistance for lighting a single LED is a good upper bound.
+The solution is to scan an entire row or column of the matrix at once. One can drive multiple LEDs simultaneously by (e.g.) turning on one anode and multiple cathodes (but take care not to over-current the microcontroller IO pins). Appendix 1 (at the end of this post) gives notes for setting resistor values, but the usual series resistance for lighting a single LED is a good upper bound.
 
 
 ![](./Graphics/rowscan_425_5.gif)
