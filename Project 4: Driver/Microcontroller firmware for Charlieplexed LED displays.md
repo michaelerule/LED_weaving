@@ -386,8 +386,6 @@ void loop() {
 }
 ```
 
-![](./Graphics/zoom_425_10.gif)
-
 A full working sketch is given in [Example 5]()
 
 ## 6. Double buffering for better animations
@@ -541,6 +539,9 @@ White and blue LEDs can have a forward voltage up to ~4 V (but check the datashe
 
 
 ## Happy hacking `(:`
+
+
+![](./Graphics/zoom_850_10.gif)
 
 At this point, we have constructed a LED display and verified that the hardware works. We've written a display driver that uses row (or column) scanning, runs in the background using timer interrupts, and supports double-buffering. 
 
