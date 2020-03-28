@@ -1,6 +1,8 @@
 
 # Microcontroller firmware for Charlieplexed LED displays
 
+![](./Graphics/IMAG1999_BURST006.jpg)
+
 With coronavirus lockdown in full effect, I find myself in search of quiet immersive hobbies to pass the time. Building LED displays by hand will do.
 
 Previous posts illustrated hardware building [Charlieplexed](https://en.wikipedia.org/wiki/Charlieplexing) displays ([1](http://crawlingrobotfortress.blogspot.com/2013/03/charlieplexing-with-led-dot-matrix.html)
@@ -220,7 +222,7 @@ The full working sketch is given in [Example 3]()
 
 ## 4. Tight loops: optimize it
 
-So far, we've been setting the states of the IO pins individually. This is a bit slow, so let's optimize things. On most microcontrollers IO lines are grouped into "ports", each of which contains 8 IO pins. One can set the state of all 8 pins simultaneously by writing an 8-bit integer to the port. I'm using an AtMega328-based board, which has three ports (B, C, and D). Quoting the [Arduino tutorial on port manipulation](https://www.arduino.cc/en/Reference/PortManipulation), each port is controlled by three registers:
+So far, we've been setting the states of the IO pins individually. This is a bit slow, so let's optimize things. On most microcontrollers IO lines are grouped into "ports", each of which contains 8 IO pins. One can set the state of all 8 pins simultaneously by writing an 8-bit integer to the port. I'm using an AtMega328 board, which has three ports (B, C, and D). Quoting the [Arduino tutorial on port manipulation](https://www.arduino.cc/en/Reference/PortManipulation), each port is controlled by three registers:
 
  - The `DDR` register sets whether pins are in input or output mode  (`1` means `OUTPUT`, `0` means `INPUT`)
  - The `PORT` register controls whether pins are high or low, in output mode, and controls whether the internal pull-up resistor is active in output mode (`1` means `HIGH`, `0` means `LOW`)
@@ -312,7 +314,7 @@ A full working sketch is given in [Example 4]()
 
 For uniform brightness and to avoid flicker, we need to scan through the rows of the display at regular intervals. But, if our main loop is dedicated to the display driver, we can't really handle much computation for actually showing things on the display!
 
-The solution is to move the display scanning code into a timer interrupt routine that is called at regular intervals. There is a good introduction to timer interrupts for the Arduino on [Adafruit](https://learn.adafruit.com/multi-tasking-the-arduino-part-2/timers), and *Appendix 2* goes into more detail. For this example we'll use the AtMega's Timer 2 for scanning the display. This works provided we do not also use the [Tone library](https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/), which needs Timer 2 for other purposes.
+The solution is to move the display scanning code into a timer interrupt routine that is called at regular intervals. There is a good introduction to timer interrupts for the Arduino on [Adafruit](https://learn.adafruit.com/multi-tasking-the-arduino-part-2/timers), and *Appendix 2* goes into more detail. For this example we'll use the AtMega's Timer 2 for scanning the display. (This works provided we do not also use the [Tone library](https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/), which needs Timer 2 for other purposes.)
 
 To trigger the timer interrupt routine, we need to set up Timer 2
 and enable the Timer 2 overflow interrupt. I've wrapped this and the display-buffer initializer code in a new function `setup_display()`, which is called when the device starts.
@@ -372,7 +374,7 @@ SIGNAL(TIMER2_OVF_vect) {
 }
 ```
 
-To achieve finer control over the scanning rate, one can manually reset the timer in the overflow signal handler. Here, I set it to 187, which means the timer will overflow (i.e. reach 256) again in 256-187=69 timer tics.
+To achieve finer control over the scanning rate, one can manually reset the timer in the overflow signal handler. Here, I set it to 187, which means the timer will overflow (i.e. reach 256) again in 256-187=69 timer tics. (The other way to do this is to use an output-compare interrupt with the 'compare to counter' mode.)
 
 With the display-driving code out of the way, one can now add interesting rendering code in the main program loop. As a first test, I've set it to randomly change pixel values:
 
@@ -469,13 +471,15 @@ A full working sketch is given in [Example 6]()
 
 If you have CPU cycles to spare, then one can vary the brightness of pixels via [PWM](https://en.wikipedia.org/wiki/Pulse-width_modulation). This is a tricky, however, since for $N$ control lines we're already effectively PWM-ing each LED with a duty cycle of $1/N$. In my experience it is difficult to get more than 3 distinct brightness levels. 
 
-The way to do this is to scan through the display multiple times. The brightest LEDs will be lit during all scans, but we'll skip intermediate-brightness LEDs during some of the scans. 
+The way to do this is to scan through the display multiple times. The brightest LEDs will be lit during all scans, but we'll skip intermediate-brightness LEDs during some of the scans. For this example, I've implement 2-bit color, which supports four states: "off", and then three brightness levels. Human brightness perception [is nonlinear](https://en.wikipedia.org/wiki/Gamma_correction), so I double the amount of time each light is on for each brigtness increment. 
 
-For this example, I've implement 2-bit color, which supports four states: "off", and then three brightness levels. Human brightness perception [is nonlinear](https://en.wikipedia.org/wiki/Gamma_correction), so I double the amount of time each light is on for each brigtness increment. 
+I scan the display three times:
 
  - Scan 1: Duration `10` timer ticks
  - Scan 2: Duration `10` timer ticks
  - Scan 3: Duration `20` timer ticks
+ 
+And implement 3 distinct brightness values like so: 
 
  - Pixel value `0`, i.e. `0b00`: Always off.
  - Pixel value `1`, i.e. `0b01`: On during scan 1 for 10 cycles.
@@ -558,7 +562,7 @@ __________________________________
 
 ## Appendix 1: Current-limiting resistors
 
->> RESISTOR CLOSEUP SHOT
+![](./Graphics/IMAG1969.jpg)
 
 LEDs have two current ratings. The number we usually care about
 is the maximum continuous current, which is usually ~5-40 mA for discrete LEDs. When scanning multiplexed or charlieplexed arrays, however, we briefly turn LEDs on in sequence. In this case
