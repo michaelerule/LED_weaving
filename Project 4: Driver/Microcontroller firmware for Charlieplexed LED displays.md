@@ -392,6 +392,10 @@ A full working sketch is given in [Example 5]()
 
 Updating pixels one at a time can cause artifacts when drawing a new frame to the display. For cleaner animations, one can use [double buffering](https://en.wikipedia.org/wiki/Multiple_buffering#Double_buffering_in_computer_graphics) to draw the frames off-screen first, then show them all at once.
 
+ Without double buffering         |  With double buffering
+:--------------------------------:|:----------------------------------:
+![](./Graphics/blink1_425_2.gif)  |  ![](./Graphics/blink2_425_1.gif)
+
 We define two copies of the display buffer (`buffer1` and `buffer`), as well as two pointers, one for drawing and one for scanning the display. We alternate which pointer points to which buffer to achieve double-buffering.
 
 ```c
@@ -454,10 +458,6 @@ delay(500);
 > *Note: I'm still using the Charlieplexing grid coordinates for `i` and `j`, rather than screen coordinates. For this reason we skip the `i==j` slots, since these would correspond to the anode and cathode being the same pin. In your own project, you would use `i` and `j` in display coordinates, and add code in  `setPixel` and `getPixel` to map these to Charlieplexing-grid coordinates.*
 
 A full working sketch is given in [Example 6]()
-
- Without double buffering         |  With double buffering
-:--------------------------------:|:----------------------------------:
-![](./Graphics/blink1_425_2.gif)  |  ![](./Graphics/blink2_425_1.gif)
 
 > *Note: One can also [synchronize the buffer-flips with the display driver](https://en.wikipedia.org/wiki/Screen_tearing#Vertical_synchronization). This avoids updating the display halway through the scan. However, there really isn't a natural place to flip the buffers in the 'diagonal multiplexing' layout approach I'm using here, so I omit this.*
 
