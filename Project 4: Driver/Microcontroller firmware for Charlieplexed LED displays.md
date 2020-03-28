@@ -1,6 +1,3 @@
-[ THUMBNAIL GRAPHIC HERE MAKE FIRST FRAME SEXY ]
-
-![](image.png)
 
 # Microcontroller firmware for Charlieplexed LED displays
 
