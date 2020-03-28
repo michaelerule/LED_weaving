@@ -1,7 +1,7 @@
 
 # Microcontroller firmware for Charlieplexed LED displays
 
-With coronavirus lockdown in full effect, I find myself in search of quiet immersive hobbies to pass the time and distract from the news. Building LED displays by hand will do.
+With coronavirus lockdown in full effect, I find myself in search of quiet immersive hobbies to pass the time. Building LED displays by hand will do.
 
 Previous posts illustrated hardware building [Charlieplexed](https://en.wikipedia.org/wiki/Charlieplexing) displays ([1](http://crawlingrobotfortress.blogspot.com/2013/03/charlieplexing-with-led-dot-matrix.html)
  [2](https://crawlingrobotfortress.blogspot.com/2013/02/cross-post-diy-tinymarquee-attiny24.html)). Recent posts on [constructing displays by hand](http://crawlingrobotfortress.blogspot.com/2019/02/led-multiplexing-layouts-for-hand.html) ([3](http://crawlingrobotfortress.blogspot.com/2019/12/paper-marquee-02.html)
