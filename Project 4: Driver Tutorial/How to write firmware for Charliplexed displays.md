@@ -539,7 +539,7 @@ White and blue LEDs can have a forward voltage up to ~4 V (but check the datashe
 
 ## Happy hacking `(:`
 
-At this point, we have constructed an 'artisanal' LED display and verified that the hardware works. We've written a display driver that uses row (or column) scanning, runs in the background using timer interrupts, and supports double-buffering. 
+At this point, we have constructed a LED display and verified that the hardware works. We've written a display driver that uses row (or column) scanning, runs in the background using timer interrupts, and supports double-buffering. 
 
 The final thing you might want to do is modify the `setPixel` and `getPixel` routine to accept *display* coordinates and translate these in to coordinates on the Charlieplexing grid. This code depends on the particular layout of your project, so I don't include it here. 
 
