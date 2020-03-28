@@ -16,7 +16,7 @@ The first thing to do is to verify that all LEDs work.
 Before starting, ensure that all control lines have appropriate [current-limiting resistors](https://www.sparkfun.com/tutorials/219) to avoid damaging the LEDs (it is frustrating to burn out
 a LED matrix before even getting started).
 
-I'm working on a 306-light project that uses 18 control lines (the maximum number that one can use on the Arduino Uno while still leaving the serial pins free). I've arranged the display in a circular pattern based, but these code examples will assume an ordinary rectangular layout for simplicity.
+I'm working on a 306-light project that uses 18 control lines (the maximum number that one can use on the Arduino Uno while still leaving the serial pins free). I've arranged the display in a circular pattern, but these code examples will assume an ordinary rectangular layout for simplicity.
 
 The Arduino sketch below will light-up each LED in a Charlieplexed display in sequence. Follow the steps in the top comment to adapt it to your project.
 
