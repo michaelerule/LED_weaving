@@ -77,11 +77,11 @@ For home-made displays, I usually have a few LEDs that are burnt out or installe
 
 In Charlieplexed displays, attempting to light a dead pixel will cause current to flow in unexpected ways, spuriously lighting up the wrong LEDs. Sometime it is impractical to replace broken LEDs. For now, it suffices to note the anode and cathode pin numbers of any dead pixels. We can explicitly avoid turning them on in the display driving code late to avoid this issue.
 
-> *Note: Watch out for quality control in bulk discrete LEDs. I usually find some where the anode/cathode labels are reversed, or where the LED isn't embedded properly in the plastic housing. (Mechanical stability is especially important for home-made projects, since movement during use or soldering can break the connection between the LED chip and its leads.) For this reason, I often check each LED before soldering.*
+> *Note: Watch out for quality control in bulk discrete LEDs. I usually find some where the anode/cathode labels are reversed, or where the LED isn't embedded properly in the plastic housing. (Mechanical stability is especially important for home-made projects, since movement during use or soldering can break the connection between the LED chip and its leads.) I often check each LED before soldering.*
 
 ## 2. Row/column scanning
 
-Lighting LEDs individually works for small projects, but not for large ones (>50 LEDs). As the number of lights increases, the fraction of time that each light spends on decreases, making the display dim. There also isn't enough time to scan a large number of lights without introducing noticeable flicker.
+Lighting LEDs individually works for small projects, but not for large ones. As the number of lights increases, the fraction of time that each light spends on decreases, making the display dim. There also isn't enough time to scan a large number of lights without introducing noticeable flicker.
 
 The solution is to scan an entire row or column of the matrix at once. One can drive multiple LEDs simultaneously by (e.g.) turning on one anode and multiple cathodes (but take care not to over-current the microcontroller IO pins). Appendix 1 (at the end of this post) gives notes for setting resistor values, but the usual series resistance for lighting a single LED is a good upper bound.
 
@@ -149,7 +149,7 @@ The full working sketch is given in [Example 2]()
 
 ## 3. Display buffers
 
-At this point, we've tested that the display works electrically, and are ready to start coding a display driver. The first step is to add a display memory buffer, so that other drawing routines can turn pixels on and off.
+At this point, we're ready to start coding a display driver. The first step is to add a display memory buffer, so that other drawing routines can turn pixels on and off.
 
 We'll do this by storing one bit for each directed pair of LED control lines. We'll pack this display memory into an array of 32-bit integers, so that if the LED between line $i$ and $j$ is on, then the $j^\text{th}$ bit of the $i^\text{th}$ column will be `1` (and `0` otherwise). This background on [bitwise manipulations](https://playground.arduino.cc/Code/BitMath/) in integers might be useful. 
 
