@@ -13,8 +13,8 @@ This post covers strategies for writing firmware to drive Charlieplexed LED disp
 
 The first thing to do is to verify that all LEDs work.
 
-Before starting, ensure that all control lines have appropriate [current-limiting resistors](https://www.sparkfun.com/tutorials/219) to avoid damaging the LEDs. Speaking from experience, it is very frustrating to burn out
-a LED matrix before even getting started! 
+Before starting, ensure that all control lines have appropriate [current-limiting resistors](https://www.sparkfun.com/tutorials/219) to avoid damaging the LEDs (it is frustrating to burn out
+a LED matrix before even getting started).
 
 I'm working on a 306-light project that uses 18 control lines (the maximum number that one can use on the Arduino Uno while still leaving the serial pins free). I've arranged the display in a circular pattern based, but these code examples will assume an ordinary rectangular layout for simplicity.
 
