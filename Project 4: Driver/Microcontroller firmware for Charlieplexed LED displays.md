@@ -386,6 +386,8 @@ void loop() {
 }
 ```
 
+![](./Graphics/zoom_425_10.gif)
+
 A full working sketch is given in [Example 5]()
 
 ## 6. Double buffering for better animations
