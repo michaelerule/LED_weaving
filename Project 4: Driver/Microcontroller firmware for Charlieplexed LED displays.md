@@ -5,7 +5,7 @@ With coronavirus lockdown in full effect, I find myself in search of quiet immer
 
 Previous posts illustrated hardware ideas for building [Charlieplexed](https://en.wikipedia.org/wiki/Charlieplexing) displays ([1](http://crawlingrobotfortress.blogspot.com/2013/03/charlieplexing-with-led-dot-matrix.html)
  [2](https://crawlingrobotfortress.blogspot.com/2013/02/cross-post-diy-tinymarquee-attiny24.html)). Recent posts on [constructing displays efficiently by hand](http://crawlingrobotfortress.blogspot.com/2019/02/led-multiplexing-layouts-for-hand.html) ([3](http://crawlingrobotfortress.blogspot.com/2019/12/paper-marquee-02.html)
-[4](http://crawlingrobotfortress.blogspot.com/2019/12/dreamcatcher.html)) are useful now, since board fab houses face shutdowns and delays due to the pandemic. Bulk LEDs are still available on Ebay from regional sellers, and the postal service continues to operate in most regions. However, building the display hardware is only half the work: one also needs a display driver.
+[4](http://crawlingrobotfortress.blogspot.com/2019/12/dreamcatcher.html)) are useful now, since board fab houses face shutdowns and delays due to the pandemic. However, building the display hardware is only half the work: one also needs a display driver.
 
 This post covers strategies for writing firmware to drive Charlieplexed LED displays. I'll be working with the [Arduino Uno](https://en.wikipedia.org/wiki/Arduino_Uno), which uses the [AtMega328 microcontroller](https://en.wikipedia.org/wiki/ATmega328P), and which I suspect many of you will already have at home. These strategies are general, but the hardware-specific optimizations will need to be adapted if using a different microcontroller.
 
