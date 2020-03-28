@@ -153,7 +153,7 @@ At this point, we're ready to start coding a display driver. The first step is t
 
 We'll do this by storing one bit for each directed pair of LED control lines. We'll pack this display memory into an array of 32-bit integers, so that if the LED between line $i$ and $j$ is on, then the $j^\text{th}$ bit of the $i^\text{th}$ column will be `1` (and `0` otherwise). This background on [bitwise manipulations](https://playground.arduino.cc/Code/BitMath/) in integers might be useful. 
 
-Bit-packed representations save on memory, and (as we shall see in the next section) speed up IO operations, both important on microcontrollers with limited RAM and slow clocks. Since I have 18 control lines, I use a 32-bit unsigned integer (`uint32_t` or `unsigned long` on the Arduino). If you have fewer control lines, e.g. $\le$16, you can save space by using `uint16_t` (`unsigned int` on Arduino), or `uint8_t` if $\le$8 lines.
+Bit-packed representations save memory, and speed up IO operations, both important on microcontrollers with limited RAM and slow clocks. Since I have 18 control lines, I use a 32-bit unsigned integer (`uint32_t` or `unsigned long` on the Arduino). If you have fewer control lines, e.g. $\le$16, you can save space by using `uint16_t` (`unsigned int` on Arduino), or `uint8_t` if $\le$8 lines.
 
 In the sketch below, we've modified the row/column scanning example
 
