@@ -67,7 +67,7 @@ Before turning on the next light, we first set all pins to `INPUT` mode, with pu
 
 ![](./Graphics/scan_425_4.gif)
 
-The full working sketch is given in [Example 1](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_1_lights_up/Example_1_lights_up.ino).
+For full source code see sketch [Example 1](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_1_lights_up/Example_1_lights_up.ino).
 
 #### Dead pixels
 
@@ -145,9 +145,7 @@ void loop() {
 }
 ```
 
-
-
-The full working sketch is given in [Example 2](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_2_row_scanning/Example_2_row_scanning.ino).
+For full source code see sketch [Example 2](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_2_row_scanning/Example_2_row_scanning.ino).
 
 ## 3. Display buffers
 
@@ -216,9 +214,7 @@ void loop() {
 }
 ```
 
-![](./Graphics/pattern_850_still.png)
-
-The full working sketch is given in [Example 3](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_3_display_buffer/Example_3_display_buffer.ino).
+For full source code see sketch [Example 3](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_3_display_buffer/Example_3_display_buffer.ino).
 
 ## 4. Tight loops: optimize it
 
@@ -308,7 +304,7 @@ for (int i=0; i<NPINS; i++)
 }
 ```
 
-A full working sketch is given in [Example 4](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_4_optimize_IO/Example_4_optimize_IO.ino).
+For full source code see sketch [Example 4](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_4_optimize_IO/Example_4_optimize_IO.ino).
 
 ## 5. Timer interrupts for multi-tasking
 
@@ -386,7 +382,7 @@ void loop() {
 }
 ```
 
-A full working sketch is given in [Example 5](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_5_timer_interrupt/Example_5_timer_interrupt.ino).
+For full source code see sketch [Example 5](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_5_timer_interrupt/Example_5_timer_interrupt.ino).
 
 ## 6. Double buffering for better animations
 
@@ -444,7 +440,7 @@ for (int line=0; line<NPINS; line++)
   buffer1[line]=buffer2[line]=0;
 ```
 
-This lets us prepare the next frame off-screen, and show it all at once. A full working sketch is given in [Example 6](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_6_double_buffering/Example_6_double_buffering.ino).
+This lets us prepare the next frame off-screen, and show it all at once. For full source code see sketch [Example 6](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_6_double_buffering/Example_6_double_buffering.ino).
 
 > *Note: I'm still using the Charlieplexing grid coordinates for `i` and `j`, rather than screen coordinates. For this reason we skip the `i==j` slots, since these would correspond to the anode and cathode being the same pin. In your own project, you would use `i` and `j` in display coordinates, and add code in  `setPixel` and `getPixel` to map these to Charlieplexing-grid coordinates.*
 
