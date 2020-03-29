@@ -67,7 +67,7 @@ Before turning on the next light, we first set all pins to `INPUT` mode, with pu
 
 ![](./Graphics/scan_425_4.gif)
 
-The full working sketch is given in [Example 1]()
+The full working sketch is given in [Example 1](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_1_lights_up/Example_1_lights_up.ino).
 
 #### Dead pixels
 
@@ -147,11 +147,11 @@ void loop() {
 
 
 
-The full working sketch is given in [Example 2]()
+The full working sketch is given in [Example 2](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_2_row_scanning/Example_2_row_scanning.ino).
 
 ## 3. Display buffers
 
-At this point, we're ready to start coding a display driver. The first step is to add a display memory buffer, so that other drawing routines can turn pixels on and off.
+At this point we're ready to start coding a display driver. The first step is to add a display memory buffer so that other drawing routines can turn pixels on and off.
 
 We'll do this by storing one bit for each directed pair of LED control lines. We'll pack this display memory into an array of 32-bit integers, so that if the LED between line $i$ and $j$ is on, then the $j^\text{th}$ bit of the $i^\text{th}$ column will be `1` (and `0` otherwise). This background on [bitwise manipulations](https://playground.arduino.cc/Code/BitMath/) in integers might be useful. 
 
@@ -218,7 +218,7 @@ void loop() {
 
 ![](./Graphics/pattern_850_still.png)
 
-The full working sketch is given in [Example 3]()
+The full working sketch is given in [Example 3](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_3_display_buffer/Example_3_display_buffer.ino).
 
 ## 4. Tight loops: optimize it
 
@@ -308,7 +308,7 @@ for (int i=0; i<NPINS; i++)
 }
 ```
 
-A full working sketch is given in [Example 4]()
+A full working sketch is given in [Example 4](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_4_optimize_IO/Example_4_optimize_IO.ino).
 
 ## 5. Timer interrupts for multi-tasking
 
@@ -386,7 +386,7 @@ void loop() {
 }
 ```
 
-A full working sketch is given in [Example 5]()
+A full working sketch is given in [Example 5](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_5_timer_interrupt/Example_5_timer_interrupt.ino).
 
 ## 6. Double buffering for better animations
 
@@ -444,20 +444,9 @@ for (int line=0; line<NPINS; line++)
   buffer1[line]=buffer2[line]=0;
 ```
 
-This lets us prepare the next frame off-screen, and show it all at once. For example, we can randomly flip some LEDs:
-
-```c
-for (int i=0; i<NPINS; i++)
-  for (int j=0; j<NPINS; j++)
-    if (i!=j)
-      setPixel(drawing_buffer,i,j,random(2));
-flipBuffers();
-delay(500);
-```
+This lets us prepare the next frame off-screen, and show it all at once. A full working sketch is given in [Example 6](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_6_double_buffering/Example_6_double_buffering.ino).
 
 > *Note: I'm still using the Charlieplexing grid coordinates for `i` and `j`, rather than screen coordinates. For this reason we skip the `i==j` slots, since these would correspond to the anode and cathode being the same pin. In your own project, you would use `i` and `j` in display coordinates, and add code in  `setPixel` and `getPixel` to map these to Charlieplexing-grid coordinates.*
-
-A full working sketch is given in [Example 6]()
 
 > *Note: One can also [synchronize the buffer-flips with the display driver](https://en.wikipedia.org/wiki/Screen_tearing#Vertical_synchronization). This avoids updating the display halway through the scan. However, there really isn't a natural place to flip the buffers in the 'diagonal multiplexing' layout approach I'm using here, so I omit this.*
 
@@ -500,7 +489,8 @@ The solution to this is to separate each color into its own "virtual row", and t
 :------------------------------:|:-------------------------------:|:--------------------------------:
 ![](./Graphics/RGBW_425_2.gif)  | ![](./Graphics/hues_425_10.gif) | ![](./Graphics/wheel_425_10.gif)
 
-An example sketch is given in [Extension 2]()
+An example sketch is given in [Extension 2]().
+This approach is also used in the ["zoom in"](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/zoom_in/zoom_in.ino) sketch shown at the end of this post. 
 
 ## Extension 3: Cheating on current limits for brighter displays
 
