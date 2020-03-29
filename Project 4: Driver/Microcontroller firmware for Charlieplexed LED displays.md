@@ -1,7 +1,7 @@
 
 # Microcontroller firmware for Charlieplexed LED displays
 
-![](./Graphics/IMAG1999_BURST006.jpg)
+![](./Graphics/header.png)
 
 With coronavirus lockdown in full effect, I find myself in search of quiet immersive hobbies to pass the time. Building LED displays by hand will do.
 
