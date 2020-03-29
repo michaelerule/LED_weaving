@@ -270,7 +270,7 @@ Now, we need to prepare bit-packed IO states to send to these subroutines. Mappi
 
 A more flexible solution is to store the `display_buffer` memory in a format that is convenient for scanning the display, and handle the pin-to-line mapping when we read/write pixels from the display buffer. 
 
-The advantage of this approach is that Charlieplexing layouts [can be a  bit weird](http://crawlingrobotfortress.blogspot.com/2013/03/charlieplexing-with-led-dot-matrix.html) in terms of how pixels map to control lines. So, the code to translate pixel location into the location in the Charlieplexing grid isn't always trivial. By handling this is wrapper functions that read/write display memory, we can hide all this messiness and expose a clean interface in terms of pixel coordinates.
+The advantage of this approach is that Charlieplexing layouts [can be a  bit weird](http://crawlingrobotfortress.blogspot.com/2013/03/charlieplexing-with-led-dot-matrix.html) in terms of how pixels map to control lines. By handling this is wrapper functions that read/write display memory, we can hide all this messiness and expose a clean interface in terms of pixel coordinates.
 
 ```c
 // Write a 1-bit pixel to display memory
