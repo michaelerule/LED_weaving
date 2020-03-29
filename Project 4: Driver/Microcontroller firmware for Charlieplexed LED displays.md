@@ -11,6 +11,25 @@ Previous posts illustrated hardware building [Charlieplexed](https://en.wikipedi
 
 This post covers strategies for writing firmware to drive Charlieplexed LED displays. I'll be working with the [Arduino Uno](https://en.wikipedia.org/wiki/Arduino_Uno), which uses the [AtMega328 microcontroller](https://en.wikipedia.org/wiki/ATmega328P). These strategies are general, but the hardware-specific optimizations will need to be adapted if using a different microcontroller.
 
+## 0. Build the display
+
+I've constructed my LED display out of discrete 3 mm LEDs, placed on [cardboard from a cereal box](https://crawlingrobotfortress.blogspot.com/2019/12/paper-marquee-02.html) using a template. This particular build is a larger multi-color version of the [Fibonacci spiral](https://crawlingrobotfortress.blogspot.com/2019/12/dreamcatcher.html) layout, and the construction steps are similar. This 'dagonal Charlieplexing' layout is, I think, [the easiest for hand-crafting](https://crawlingrobotfortress.blogspot.com/2019/02/led-multiplexing-layouts-for-hand.html), since it gets the maximum number of LEDs using the smallest amount of wire and microcontroller IO pins. 
+
+The basic steps are: 
+
+ 1. Prepare a template for the LED layout, and attach this to some thin but stiff cardboard
+ 2. Peforate the cardboard for the component leads, and place components
+ 3. Connect and solder the components
+ 
+Depending on how you attach the components, it may or may not be easier to do steps (2) and (3) concurrently.
+
+
+
+Make a cardboard PCB               | Attach components      | Connect and solder
+:----------------------------------:|:-------------------------------------:|:-------------------------------------:
+![](./Graphics/template.png) | ![](./Graphics/place_components.png) | ![](./Graphics/route_and_connect.png) 
+
+
 ## 1. Test the display one light at a time
 
 The first thing to do is to verify that all LEDs work.
