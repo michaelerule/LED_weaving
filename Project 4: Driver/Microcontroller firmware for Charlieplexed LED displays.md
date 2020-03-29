@@ -453,6 +453,9 @@ This lets us prepare the next frame off-screen, and show it all at once. A full 
 
 # Additional extensions
 
+The code so far illustrates the bare essentials for a working display driver which supports one bit per pixel, runs in the background, and supports double buffering. 
+
+This is enough for most projects, but there are a couple more fun things to try. These include supporting multiple brightness levels per pixel, supporting a color display, and increasing the display brightness by calculating resistors based on average total current limits rather than peak instantaneous limits.
 
 ## Extension 1: Multiple brightness levels (more than 1-bit per pixel)
 
@@ -475,7 +478,7 @@ And implement 3 distinct brightness values like so:
  - Pixel value `2`, i.e. `0b10`: On during scans 1 and 2, for a total of 20 cycles.
  - Pixel value `3`, i.e. `0b11`: On during all scans, for a total of 40 cycles.
 
-An example sketch is given in [Extension 1]()
+An example sketch is given in [Extension 1](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Extension_1_twobit_pixels/Extension_1_twobit_pixels.ino).
 
 ## Extension 2: Driving multiple LED colors in the same grid
 
@@ -489,8 +492,7 @@ The solution to this is to separate each color into its own "virtual row", and t
 :------------------------------:|:-------------------------------:|:--------------------------------:
 ![](./Graphics/RGBW_425_2.gif)  | ![](./Graphics/hues_425_10.gif) | ![](./Graphics/wheel_425_10.gif)
 
-An example sketch is given in [Extension 2]().
-This approach is also used in the ["zoom in"](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/zoom_in/zoom_in.ino) sketch shown at the end of this post. 
+An example sketch is given in [Extension 2](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Extension_2_separate_color_scanning/Extension_2_separate_color_scanning.ino). This approach is also used in the ["zoom in"](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/zoom_in/zoom_in.ino) sketch shown at the end of this post. These examples were optimized for the weird spiral layout of my project, which split the lines into "high" (blue and white LEDs) and "low" (red and green LEDs) voltage to simplify color scanning.  More generally you might need to manually specify bit-masks for each color, with one entry per pixel. 
 
 ## Extension 3: Cheating on current limits for brighter displays
 
