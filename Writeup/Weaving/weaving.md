@@ -1,0 +1,61 @@
+
+Some more LED layouts for hand crafting
+
+[LED multiplexing layouts for hand-crafting](https://crawlingrobotfortress.blogspot.com/2019/02/led-multiplexing-layouts-for-hand.html) outlined an easy way to layout LED grids, using a diagonal section of a [Charlieplexed](https://crawlingrobotfortress.blogspot.com/2013/03/charlieplexing-with-led-dot-matrix.html) grid of LEDs. 
+
+The central theme of these layouts is that they should consist of a regular, repeating lattice of N driving lines, such that each pair of lines cross exactly twice. One LED is placed at each crossing (one forward and one backwards, in terms of polarity, for each pair).
+
+This post presents some additional layouts, designs for creating LED e-textiles via embroidery or bead-weaving. 
+
+### Grid arrangements
+
+The diagonal nature of the diagonal-multiplexing grid does not lend itself easily to conventional row/column display designs. Previously, we [distorted the diagonal grid](https://crawlingrobotfortress.blogspot.com/2019/12/paper-marquee-02.html) to create a square layout. This is tricky to solder correctly.  One can achieve the same effect by skipping every-other position in the diagonal grid. Then, repeat the whole diagonal-multiplex pattern again, this time with the polarity of the LEDs reversed. 
+
+Here is an example where 9 control lines drive a 4×18 LED matrix. Below, the red/blue halves of the LEDs denote polarity (not color! these would be single-color LEDs). The polarity of the rightmost half of LEDs should be flipped. This approach works if the number of control lines is odd. 
+
+![](./pattern2c.svg)
+
+The two repeated patterns can also be sewn together in parallel. In this case, building a 9×8 grid.
+
+![](./pattern2d.svg)
+ 
+ 
+### Linear arrangements
+
+In two special cases, its possible to lay out a straight line of LEDs. One pattern drives 6 LEDs on 3 lines, and another drives 20 LEDs on five lines. These designs intended for LED embroidery projects. 
+
+3 lines control 6 LEDs. (The polarity of the rightmost half of LEDs should be flipped.)
+
+![](./mesh2a.svg)
+
+5 lines control 20 LEDs. (The polarity of the rightmost half of LEDs should be flipped.) 
+
+![](./mesh2b.svg)
+
+These could also be wrapped to form a circle. 
+
+### RGB tiles
+
+These RGB tiles were design to work with 6-pin RGB LED modules, which expose both the anodes and cathode of each individual color channel. It is possible to design a single "tile" sewable PCB that will work with both layouts below. The idea is that this could enable a tile or "scale" pattern on e-textiles. 
+
+9 lines control 72 LEDs, creating 24 RGB tiles arranged in a 4×6 grid. Every three rows of the diagonal-Charlieplexing grid are grouped to produce one set of RGB tiles. 
+
+This pattern can be generalized to any number of control lines that is both odd and divisible by 3. E.g. 9, 15, and 21 control lines produce 4×6, 7×10, and 10×14 grids, respectively.
+
+![](./pattern20b.svg)
+
+13 lines control 156 LEDs, creating 52 RGB tiles arranged in a 4×13 grid. Each row is grouped in alternating patterns of 2 and 1 LEDs, which are then groups by row into groups of 2+1=3. 
+
+This pattern can be generalized to any number of control lines $N$ such that $N$ is odd and $N-1$ is divisible by 3. E.g. 7, 13, and 19 control lines produce 2×7, 4×13, and 6×19 grids, respectively.
+
+![](./pattern8c.svg)
+
+(I think.. double check these.)
+
+### Driving notes
+
+All of these designs assume tri-state drivers (positive, negative, and high-impedence (off)) that can source fairly large currents (e.g. ~40 mA). This is typical of the AtMega and AtTiny AVR chips powering most flavors of Arduino. 
+
+For large e-textile designs, the resistance of the conductive thread might be an issue. It may be necessary to use multiple threads in parallel, or to selecting a high conductance thread. Adjusting the layout so that no LEDs are too distant from the driver might also help. Crude software balancing of brightness via PWM may also be possible, but difficult on larger displays. 
+
+When driving displays that mix LEDs of different forward voltages: If more than one LED is lit at a time, then the red/green/blue LEDs must be scanned separately. Unless individual current-limiting resistors are provided for each LED, the forward voltage of th red LEDs must not be less than half the forward voltage of the blue LEDs.

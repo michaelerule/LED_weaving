@@ -1,19 +1,19 @@
 
+
+
 # Microcontroller firmware for Charlieplexed LED displays
 
-![](./Graphics/header.png)
+![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/header.png)
 
 With coronavirus lockdown in full effect, I find myself in search of quiet immersive hobbies to pass the time. Building LED displays by hand will do.
 
-Previous posts illustrated hardware building [Charlieplexed](https://en.wikipedia.org/wiki/Charlieplexing) displays ([1](http://crawlingrobotfortress.blogspot.com/2013/03/charlieplexing-with-led-dot-matrix.html)
- [2](https://crawlingrobotfortress.blogspot.com/2013/02/cross-post-diy-tinymarquee-attiny24.html)). Recent posts on [constructing displays by hand](http://crawlingrobotfortress.blogspot.com/2019/02/led-multiplexing-layouts-for-hand.html) ([3](http://crawlingrobotfortress.blogspot.com/2019/12/paper-marquee-02.html)
-[4](http://crawlingrobotfortress.blogspot.com/2019/12/dreamcatcher.html)) are useful now, since board fab houses face shutdowns and delays due to the pandemic. However, building the display hardware is only half the work: one also needs a display driver.
+Previous posts illustrated hardware building [Charlieplexed](https://en.wikipedia.org/wiki/Charlieplexing) displays ([1](http://crawlingrobotfortress.blogspot.com/2013/03/charlieplexing-with-led-dot-matrix.html) [2](https://crawlingrobotfortress.blogspot.com/2013/02/cross-post-diy-tinymarquee-attiny24.html)). Recent posts on [constructing displays by hand](http://crawlingrobotfortress.blogspot.com/2019/02/led-multiplexing-layouts-for-hand.html) ([3](http://crawlingrobotfortress.blogspot.com/2019/12/paper-marquee-02.html)[4](http://crawlingrobotfortress.blogspot.com/2019/12/dreamcatcher.html)) are useful now, since board fab houses face shutdowns and delays due to the pandemic. However, building the display hardware is only half the work: one also needs a display driver.
 
 This post covers strategies for writing firmware to drive Charlieplexed LED displays. I'll be working with the [Arduino Uno](https://en.wikipedia.org/wiki/Arduino_Uno), which uses the [AtMega328 microcontroller](https://en.wikipedia.org/wiki/ATmega328P). These strategies are general, but the hardware-specific optimizations will need to be adapted if using a different microcontroller.
 
 ## 0. Build the display
 
-I've constructed my LED display out of discrete 3 mm LEDs, placed on [cardboard from a cereal box](https://crawlingrobotfortress.blogspot.com/2019/12/paper-marquee-02.html) using a template. This particular build is a larger multi-color version of the [Fibonacci spiral](https://crawlingrobotfortress.blogspot.com/2019/12/dreamcatcher.html) layout, and the construction steps are similar. This 'dagonal Charlieplexing' layout is, I think, [the easiest for hand-crafting](https://crawlingrobotfortress.blogspot.com/2019/02/led-multiplexing-layouts-for-hand.html), since it gets the maximum number of LEDs using the smallest amount of wire and microcontroller IO pins. 
+I've constructed my LED display out of discrete 3 mm LEDs, placed on [cardboard from a cereal box](https://crawlingrobotfortress.blogspot.com/2019/12/paper-marquee-02.html) using a template. The 'diagonal Charlieplexing' layout is, I think, [the easiest for hand-crafting](https://crawlingrobotfortress.blogspot.com/2019/02/led-multiplexing-layouts-for-hand.html), since it gets the maximum number of LEDs using the smallest amount of wire and microcontroller IO pins. This particular build is a larger multi-color version of the [Fibonacci spiral](https://crawlingrobotfortress.blogspot.com/2019/12/dreamcatcher.html) layout, and the construction steps are similar. 
 
 The basic steps are: 
 
@@ -27,7 +27,7 @@ Depending on how you attach the components, it may or may not be easier to do st
 
 Make a cardboard PCB               | Attach components      | Connect and solder
 :----------------------------------:|:-------------------------------------:|:-------------------------------------:
-![](./Graphics/template.png) | ![](./Graphics/place_components.png) | ![](./Graphics/route_and_connect.png) 
+![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/template.png) | ![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/place_components.png) | ![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/route_and_connect.png) 
 
 
 ## 1. Test the display one light at a time
@@ -84,7 +84,7 @@ void loop() {
 
 Before turning on the next light, we first set all pins to `INPUT` mode, with pull-up resistors disabled. This avoids triggering any LEDs accidentally as we switch the other pins.
 
-![](./Graphics/scan_425_4.gif)
+![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/scan_425_4.gif)
 
 For full source code see sketch [Example 1](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Example_1_lights_up/Example_1_lights_up.ino).
 
@@ -94,7 +94,7 @@ For full source code see sketch [Example 1](https://github.com/michaelerule/LED_
 For home-made displays, I usually have a few LEDs that are burnt out or installed backwards. Thesting the display will reveal such 'dead pixels', and now is good time to replace or re-solder them. 
 
 
-![](./Graphics/IMAG1883_.jpg)
+![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/IMAG1883_.jpg)
 
 In Charlieplexed displays, attempting to light a dead pixel will cause current to flow in unexpected ways, spuriously lighting up the wrong LEDs. Sometime it is impractical to replace broken LEDs. For now, it suffices to note the anode and cathode pin numbers of any dead pixels. We can explicitly avoid turning them on in the display driving code late to avoid this issue.
 
@@ -107,7 +107,7 @@ Lighting LEDs individually works for small projects, but not for large ones. As 
 The solution is to scan an entire row or column of the matrix at once. One can drive multiple LEDs simultaneously by (e.g.) turning on one anode and multiple cathodes (but take care not to over-current the microcontroller IO pins). Appendix 1 (at the end of this post) gives notes for setting resistor values, but the usual series resistance for lighting a single LED is a good upper bound.
 
 
-![](./Graphics/rowscan_425_5.gif)
+![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/rowscan_425_5.gif)
 
 #### Single-light scanning
  - **Good:** If only a sparse subset of the LEDs are on at a given time, this can lead to a brighter and more uniform display.
@@ -409,7 +409,7 @@ Updating pixels one at a time can cause artifacts when drawing a new frame to th
 
  Without double buffering         |  With double buffering
 :--------------------------------:|:----------------------------------:
-![](./Graphics/blink1_425_2.gif)  |  ![](./Graphics/blink2_425_1.gif)
+![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/blink1_425_2.gif)  |  ![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/blink2_425_1.gif)
 
 We define two copies of the display buffer (`buffer1` and `buffer`), as well as two pointers, one for drawing and one for scanning the display. We alternate which pointer points to which buffer to achieve double-buffering.
 
@@ -474,7 +474,7 @@ This is enough for most projects, but there are a couple more fun things to try.
 
 ## Extension 1: Multiple brightness levels (more than 1-bit per pixel)
 
-![](./Graphics/v93-dim-425-15b.gif)
+![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/v93-dim-425-15b.gif)
 
 If you have CPU cycles to spare, then one can vary the brightness of pixels via [PWM](https://en.wikipedia.org/wiki/Pulse-width_modulation). This is a tricky, however, since for $N$ control lines we're already effectively PWM-ing each LED with a duty cycle of $1/N$. In my experience it is difficult to get more than 3 distinct brightness levels. 
 
@@ -505,7 +505,7 @@ The solution to this is to separate each color into its own "virtual row", and t
 
  Scan colors separately         |  Pixel location → color         |  Nice.
 :------------------------------:|:-------------------------------:|:--------------------------------:
-![](./Graphics/RGBW_425_2.gif)  | ![](./Graphics/hues_425_10.gif) | ![](./Graphics/wheel_425_10.gif)
+![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/RGBW_425_2.gif)  | ![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/hues_425_10.gif) | ![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/wheel_425_10.gif)
 
 An example sketch is given in [Extension 2](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/Extension_2_separate_color_scanning/Extension_2_separate_color_scanning.ino). This approach is also used in the ["zoom in"](https://github.com/michaelerule/LED_weaving/blob/master/Project%204:%20Driver/zoom_in/zoom_in.ino) sketch shown at the end of this post. These examples were optimized for the weird spiral layout of my project, which split the lines into "high" (blue and white LEDs) and "low" (red and green LEDs) voltage to simplify color scanning.  More generally you might need to manually specify bit-masks for each color, with one entry per pixel. 
 
@@ -521,14 +521,13 @@ $$ R_{\text{ch}} = \frac K {K+1} \frac {V_{\text{supply}} - V_{\text{LED}}} {I_{
 
 Strict current limits               | Cheating: limit average current      | Visible in diffuse daylight
 :----------------------------------:|:-------------------------------------:|:-------------------------------------:
-![](./Graphics/v93-dim-425-15b.gif) | ![](./Graphics/v93-bright-425-15.gif) | ![](./Graphics/v94-01995_425_20.gif) 
+![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/v93-dim-425-15b.gif) | ![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/v93-bright-425-15.gif) | ![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/v94-01995_425_20.gif) 
 
 What if we were to re-interpret the 40 mA/pin current limit as an *average* current draw? This should be ok if the main thing limiting the current is heat dissipation. 
 
 That said, we still need to keep the total current draw below 200 mA for the arduino. For projects with 6 or more contorl lines, you need to set the maximum average current per pin to $200/N_{\text{pins}}$ mA (this is $200/18\approx11$ mA for my project).
 
-Each pin needs to source $I_{\text{peak}}$ of current as anodes $1/N$ of the time, for an average current draw of $I_{\text{peak}}/N$. This current needs to go somewhere, which means that all pins are
-also sinking $I_{\text{peak}}/N$ of current, on average. This suggests that we can (transiently) source up to
+Each pin needs to source $I_{\text{peak}}$ of current as anodes $1/N$ of the time, for an average current draw of $I_{\text{peak}}/N$. This current needs to go somewhere, which means that all pins are also sinking $I_{\text{peak}}/N$ of current, on average. This suggests that we can (transiently) source up to
 
 $$I_{\text{peak}} = \tfrac{N}{2} \cdot I_{\text{pin}}$$
 
@@ -548,7 +547,7 @@ White and blue LEDs can have a forward voltage up to ~4 V (but check the datashe
 ## Happy hacking `(:`
 
 
-![](./Graphics/zoom_850_10.gif)
+![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/zoom_850_10.gif)
 
 At this point, we have constructed a LED display and verified that the hardware works. We've written a display driver that uses row (or column) scanning, runs in the background using timer interrupts, and supports double-buffering. 
 
@@ -572,7 +571,7 @@ __________________________________
 
 ## Appendix 1: Current-limiting resistors
 
-![](./Graphics/IMAG1969.jpg)
+![](https://raw.githubusercontent.com/michaelerule/LED_weaving/2851861c2e12ecc0c68d9ff25429ba97fdfed4e8/Project%204%3A%20Driver/Graphics/IMAG1969.jpg)
 
 LEDs have two current ratings. The number we usually care about
 is the maximum continuous current, which is usually ~5-40 mA for discrete LEDs. When scanning multiplexed or charlieplexed arrays, however, we briefly turn LEDs on in sequence. In this case
@@ -730,4 +729,3 @@ Last but not least: change the output-compare register values in the interrupt h
 Since we have two interrupts that trigger twice, this gives us 4 evenly-spaced interrupts during the Timer 1 cycle. For the default configuration on a 16 MHz AtMega*8-based board, this gives us a scan rate of 4.096 kHz. If you don't need a 4 kHz scan rate, you can just use one output-compare interrupt to achieve a 2 kHz rate with this trick.
 
 When I tried to push this even further, for example trying `OCR0A += 64` or `OCR0A += 32`, I ran into issues with flickering in the display. I'm not sure why; it might be related to the large (18) number of control lines that I'm using. You might want to experiment with this and let me know how it goes!
-
