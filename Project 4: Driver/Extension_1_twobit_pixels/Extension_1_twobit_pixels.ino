@@ -54,7 +54,6 @@ void setPixel(uint32_t *buff, int i, int j, int value) {
 int getPixel(uint32_t *buff, int i, int j) {
   int value = 0;
   for (int bi=0; bi<NBITS; bi++) {
-    int b = (value>>bi)&1;
     int c = bi*NPINS;
     value |= ((buff[c+pinmap[i]]>>pinmap[j])&1)<<bi;
   }
